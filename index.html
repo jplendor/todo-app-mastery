@@ -5,6 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body></body>
+  <body>
+    <div class="todo-container">
+      <div class="todo-title">
+        <h1>🌷 To Do List 🌷</h1>
+      </div>
+      <div class="todo-input-box">
+        <input id="todo-input">
+        <button id="addBtn">추가</button>
+      </div>
+      <ul id="todo-list">
+      </ul>
+      <div id="todo-rate">
+        <progress id="rate-bar" value="0" max="100"></progress>
+        <div id="rate-per">0 %</div>
+      </div>
+    </div>
+    <script type="text/javascript" src="todo.js"></script>
+  </body>
 </html>
