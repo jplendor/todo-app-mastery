@@ -8,5 +8,27 @@
     <script defer src="todo.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="todo-container">
+      <h1>Todo-App</h1>
+      <form class="todo-form">
+        <input
+          name="todo-input"
+          class="todo-input"
+          placeholder="what you gonna do?"
+        />
+        <input class="todo-submit" type="submit" />
+      </form>
+      <div class="todo-view">
+        <div class="todo-view-pending">
+          <h2>Pending</h2>
+          <ul class="pending-list"></ul>
+        </div>
+        <div class="todo-view-finished">
+          <h2>Finished</h2>
+          <ul class="finished-list"></ul>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
