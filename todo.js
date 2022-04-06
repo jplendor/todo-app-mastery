@@ -4,8 +4,8 @@ const $finishedList = document.querySelector('.finished-list');
 const PENDING = 'pending';
 const FINISHED = 'finished';
 
-let pendingData = [];
-let finishedData = [];
+let pendingList = [];
+let finishedList = [];
 
 const saveToDo = (listName, newList) => {
   localStorage.setItem(listName, JSON.stringify(newList));
@@ -20,26 +20,22 @@ const removeDOM = (listName, li) => {
 const deleteToDo = (e) => {
   const li = e.target.parentNode;
   const listName = li.parentNode.className.split('-')[0];
-
   removeDOM(listName, li);
   updateToDo('DEL', listName, li.id, null);
 };
 
 const moveToDo = (e) => {
-  const isChecked = e.target.checked;
-  const li = e.target.parentNode;
   const text = e.target.nextSibling.textContent;
-  const listName = isChecked ? PENDING : FINISHED;
-
-  removeDOM(listName, li);
-  updateToDo('DEL', listName, li.id, null);
+  const liId = e.target.parentNode.id;
+  const listName = e.target.checked ? PENDING : FINISHED;
+  deleteToDo(e);
 
   if (listName === PENDING) {
-    paintToDo(FINISHED, li.id, text);
-    updateToDo('ADD', FINISHED, li.id, text);
+    paintToDo(FINISHED, liId, text);
+    updateToDo('ADD', FINISHED, liId, text);
   } else {
-    paintToDo(PENDING, li.id, text);
-    updateToDo('ADD', PENDING, li.id, text);
+    paintToDo(PENDING, liId, text);
+    updateToDo('ADD', PENDING, liId, text);
   }
 };
 
@@ -63,12 +59,11 @@ const ToDoList = (listName, text) => {
   li.appendChild(checkBox);
   li.appendChild(textNode);
   li.appendChild(delBtn);
-  $pendingList.appendChild(li);
   return li;
 };
 
 const updateToDo = (type, listName, id, text) => {
-  const prevToDos = listName === PENDING ? pendingData : finishedData;
+  const prevToDos = listName === PENDING ? pendingList : finishedList;
   let newToDos = '';
 
   switch (type) {
@@ -84,36 +79,35 @@ const updateToDo = (type, listName, id, text) => {
   }
 
   saveToDo(listName, newToDos);
+
   listName === PENDING //
-    ? (pendingData = newToDos)
-    : (finishedData = newToDos);
+    ? (pendingList = newToDos)
+    : (finishedList = newToDos);
 };
 
 const paintToDo = (listName, id, text) => {
   const li = ToDoList(listName, text);
   li.id = id;
 
-  if (listName === PENDING) {
-    $pendingList.appendChild(li);
-  } else {
-    $finishedList.appendChild(li);
-  }
+  listName === PENDING
+    ? $pendingList.appendChild(li)
+    : $finishedList.appendChild(li);
 };
 
 const loadToDo = () => {
-  const pendingData = localStorage.getItem(PENDING);
-  const finishedData = localStorage.getItem(FINISHED);
+  const pendingList = localStorage.getItem(PENDING);
+  const finishedList = localStorage.getItem(FINISHED);
 
-  pendingData &&
-    JSON.parse(pendingData).forEach((todo) => {
+  pendingList &&
+    JSON.parse(pendingList).forEach((todo) => {
       paintToDo(PENDING, todo.id, todo.text);
-      updateToDo(PENDING, todo.id, todo.text);
+      updateToDo('ADD', PENDING, todo.id, todo.text);
     });
 
-  finishedData &&
-    JSON.parse(pendingData).forEach((todo) => {
+  finishedList &&
+    JSON.parse(finishedList).forEach((todo) => {
       paintToDo(FINISHED, todo.id, todo.text);
-      updateToDo(FINISHED, todo.id, todo.text);
+      updateToDo('ADD', FINISHED, todo.id, todo.text);
     });
 };
 
