@@ -1,45 +1,45 @@
 let todos = []
 let id = 0
 
-const setTodos = (newTodos) => {
-    todos = newTodos
-}
+const setTodos = (newTodos) => todos = newTodos
 
-const getTodos = () => {
-    return todos
-}
+const getTodos = () => todos
 
 const init = () => {
-    const addBtn = document.getElementById("addBtn")
-    addBtn.addEventListener("click", () => {add_todo()})
+    document.querySelector(".todo-input-box").addEventListener("submit", handleSubmit)
 }
 
-const add_todo = () => {
+const handleSubmit = (e) => {
+    e.preventDefault()
+    addTodo()
+}
+
+const addTodo = () => {
     const newId = id++
-    const todoInputElem = document.getElementById("todo-input")
+    const todoInputElem = document.querySelector(".todo-input")
     const newTodos = [...getTodos(), {id: newId, content: todoInputElem.value, isCompleted: false}]
     todoInputElem.value = ''
+    updateAll(newTodos)
+}
+
+const updateAll = (newTodos) => {
     setTodos(newTodos)
     paintTodos()
-    calcRate()
+    calcRate()    
 }
 
-const delete_todo = (todoId) => {
-    new_todos = todos.filter(todo => todo.id !== todoId)
-    setTodos(new_todos)
-    paintTodos()
-    calcRate()
+const deleteTodo = (todoId) => {
+    newTodos = todos.filter(todo => todo.id !== todoId)
+    updateAll(newTodos)
 }
 
-const complete_todo = (todoId) => {
-    new_todos = todos.map(todo => todo.id === todoId? {id: todo.id, content: todo.content, isCompleted: !todo.isCompleted}: todo)
-    setTodos(new_todos)
-    paintTodos()
-    calcRate()
+const completeTodo = (todoId) => {
+    newTodos = todos.map(todo => todo.id === todoId? {...todo, isCompleted: !todo.isCompleted}: todo)
+    updateAll(newTodos)
 }
 
 const paintTodos = () => {
-    const todoListElem = document.getElementById("todo-list")
+    const todoListElem = document.querySelector(".todo-list")
     todoListElem.innerHTML = null
 
     todos.forEach(todo => {
@@ -48,15 +48,15 @@ const paintTodos = () => {
         
         const checkboxElem = document.createElement("div")
         checkboxElem.classList.add("checkbox")
-        checkboxElem.addEventListener("click", () => {complete_todo(todo.id)})
+        checkboxElem.addEventListener("click", () => {completeTodo(todo.id)})
 
         const todoElem = document.createElement("div")
         todoElem.classList.add("todo")
         todoElem.innerText = todo.content
 
         const delBtnElem = document.createElement("div")
-        delBtnElem.classList.add("delBtn")
-        delBtnElem.addEventListener("click", () => {delete_todo(todo.id)})
+        delBtnElem.classList.add("todo-del-btn")
+        delBtnElem.addEventListener("click", () => {deleteTodo(todo.id)})
         delBtnElem.innerText = "❌"
 
         if(todo.isCompleted) {
@@ -80,10 +80,10 @@ const calcRate = () => {
     const completed = completedTodos.length
     const rate = Math.floor(completed*100/total)
 
-    const rateBarElem = document.getElementById("rate-bar")
+    const rateBarElem = document.querySelector(".rate-bar")
     rateBarElem.value = rate
 
-    const ratePerElem = document.getElementById("rate-per")
+    const ratePerElem = document.querySelector(".rate-per")
     ratePerElem.innerText = `${rate} %`
 }
 
