@@ -11,7 +11,7 @@ const checkToDo = (e) => {
     'checked'
   );
   completed
-    ? e.target.parentNode.classList.remove('checked')
+    ? e.target.parentNode.classList.toggle('checked')
     : e.target.parentNode.classList.add('checked');
 
   calcRate();
@@ -28,7 +28,7 @@ const ToDoItem = (id, text) => {
   checkBox.addEventListener('change', checkToDo);
 
   delBtn.classList.add('todo-delete');
-  delBtn.innerText = '❌';
+  delBtn.textContent = '❌';
   delBtn.addEventListener('click', deleteToDo);
 
   li.id = id;
